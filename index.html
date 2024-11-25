@@ -6,50 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplication Table</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="multiplication_table.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script> <!-- jQuery Validation Plugin -->
 </head>
 <body>
     <h1>Multiplication Table</h1>
-    <div id="error-message" class="error-message"></div> <!-- Placeholder for error messages -->
+    <div id="error-message" class="error-message"></div>
     <div class="container">
-        <div id="table-container" class="table-container">
+        <div id="table-container" class="table-container"> <!-- Table will be generated here -->
             <table>
                 <thead>
                     <tr>
-                        <th></th> <!-- Empty top-left cell for alignment -->
-                        <!-- Column headers will be added here dynamically by JavaScript -->
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Row headers and data cells will be added here dynamically by JavaScript -->
                 </tbody>
             </table>
         </div>
         <div class="forms">
-            <form id="minRowForm">
-                <h3>Min Row Value</h3>
+            <form id="tableForm">
+                <h3>Table Inputs</h3>
                 <label for="minRow">Minimum Row:</label>
                 <input type="number" id="minRow" name="minRow">
-            </form>
-            <form id="maxRowForm">
-                <h3>Max Row Value</h3>
+                <br>
                 <label for="maxRow">Maximum Row:</label>
                 <input type="number" id="maxRow" name="maxRow">
-            </form>
-            <form id="minColForm">
-                <h3>Min Column Value</h3>
+                <br>
                 <label for="minCol">Minimum Column:</label>
                 <input type="number" id="minCol" name="minCol">
-            </form>
-            <form id="maxColForm">
-                <h3>Max Column Value</h3>
+                <br>
                 <label for="maxCol">Maximum Column:</label>
                 <input type="number" id="maxCol" name="maxCol">
+                <br><br>
+                <button type="submit" id="submitButton">Generate Table</button>
             </form>
-            <button onclick="generateTable()">Generate Table</button>
         </div>
-    </div>
-
-    <!-- Link to the JavaScript file -->
-    <script src="multiplication_table.js"></script>
+        <script>
+            // Add custom validation method for max > min
+            $.validator.addMethod("greaterThan", function(value, element, param) {
+                let minValue = $(param).val();
+                return parseInt(value) > parseInt(minValue);
+            }, "Maximum value must be greater than the minimum value");
+        
+            // Form validation
+            $("#tableForm").validate({
+                rules: {
+                    minRow: { required: true, min: -50, max: 50, number: true },
+                    maxRow: { required: true, min: -50, max: 50, number: true, greaterThan: "#minRow" },
+                    minCol: { required: true, min: -50, max: 50, number: true },
+                    maxCol: { required: true, min: -50, max: 50, number: true, greaterThan: "#minCol" }
+                },
+                messages: {
+                    minRow: {
+                        required: "Please enter a minimum row value",
+                        min: "Value must be at least -50",
+                        max: "Value must be at most 50",
+                        number: "Value must be a number"
+                    },
+                    maxRow: {
+                        required: "Please enter a maximum row value",
+                        min: "Value must be at least -50",
+                        max: "Value must be at most 50",
+                        number: "Value must be a number",
+                        greaterThan: "Maximum row must be greater than the minimum row"
+                    },
+                    minCol: {
+                        required: "Please enter a minimum column value",
+                        min: "Value must be at least -50",
+                        max: "Value must be at most 50",
+                        number: "Value must be a number"
+                    },
+                    maxCol: {
+                        required: "Please enter a maximum column value",
+                        min: "Value must be at least -50",
+                        max: "Value must be at most 50",
+                        number: "Value must be a number",
+                        greaterThan: "Maximum column must be greater than the minimum column"
+                    }
+                },
+                submitHandler: function(form) {
+                    // Call generateTable() if the form is valid
+                    generateTable();
+                }
+            });
+        </script>
 </body>
 </html>
