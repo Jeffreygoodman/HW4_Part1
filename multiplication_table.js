@@ -1,3 +1,4 @@
+// Jeffrey Goodman
 function generateTable() {
     const minRow = parseInt(document.getElementById('minRow').value); // Get the values inputted
     const maxRow = parseInt(document.getElementById('maxRow').value);
